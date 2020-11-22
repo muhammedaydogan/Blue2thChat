@@ -1,7 +1,6 @@
 package com.ma.blue2thchat.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +28,7 @@ public class SearchFragment extends Fragment {
     private long lastBackPress;
 
     Animation rotateAroundItself;
+    private View searchingIcon;
 
     @Override
     public View onCreateView(
@@ -51,7 +51,7 @@ public class SearchFragment extends Fragment {
         rotateAroundItself.setDuration(500);
         rotateAroundItself.setInterpolator(new LinearInterpolator());
 
-        View searchingIcon = view.findViewById(R.id.searchingIcon);
+        searchingIcon = view.findViewById(R.id.searchingIcon);
         searchingIcon.startAnimation(rotateAroundItself);
 
         // This callback will only be called when MyFragment is at least Started.
@@ -72,15 +72,24 @@ public class SearchFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
 
         ArrayList<BleDevice> bleDevices = new ArrayList<>();
-        bleDevices.add(new BleDevice(null,"ec:ab:58:da:12:49",16));
-        bleDevices.add(new BleDevice(null,"ec:ab:58:da:12:49",3));
-        bleDevices.add(new BleDevice("Finch","ec:ab:58:da:12:49",6));
-        bleDevices.add(new BleDevice(null,"ec:ab:58:da:12:49",13));
+        bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", -1));
+        bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 3));
+        bleDevices.add(new BleDevice("Finch", "ec:ab:58:da:12:49", -1));
+        bleDevices.add(new BleDevice("Finch", "ec:ab:58:da:12:49", 19));
+        bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 13));
 
         BluetoothAdapter adapter = new BluetoothAdapter(bleDevices);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
+
+        adapter.setOnConnectListener(new BluetoothAdapter.OnConnectListener() {
+            @Override
+            public void onConnect(int position) {
+                Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+                searchingIcon.clearAnimation();
+            }
+        });
     }
 }

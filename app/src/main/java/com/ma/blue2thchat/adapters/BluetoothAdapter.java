@@ -1,6 +1,5 @@
 package com.ma.blue2thchat.adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,18 +37,28 @@ public class BluetoothAdapter extends RecyclerView.Adapter<BluetoothAdapter.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         BleDevice bleDevice = bleDevices.get(position);
-        if (!(bleDevice.getAvatarNo() == -1))
+
+
+
+        if (bleDevice.getAvatarNo() < avatarRes.length && bleDevice.getAvatarNo() >= 0)
             holder.avatarImageView.setImageResource(avatarRes[bleDevice.getAvatarNo()]);
 
-        if (bleDevice.getName() == null)
-            holder.avatarName.setText(avatarNames[bleDevice.getAvatarNo()]);
+        if (bleDevice.getName() == null) {
+            if (bleDevice.getAvatarNo() < avatarNames.length && bleDevice.getAvatarNo() >= 0)
+                holder.avatarName.setText(avatarNames[bleDevice.getAvatarNo()]);
+            else
+                holder.avatarName.setText(R.string.unknown_device);
+        } else if (bleDevice.getName().equals(""))
+            holder.avatarName.setText(R.string.unknown_device);
         else
             holder.avatarName.setText(bleDevice.getName());
+
         holder.macAddress.setText(bleDevice.getMacAddress());
         holder.bluetoothIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(TAG, "onClick: " + position);
+                if (onConnectListener != null)
+                    onConnectListener.onConnect(position);
             }
         });
     }
@@ -74,5 +83,15 @@ public class BluetoothAdapter extends RecyclerView.Adapter<BluetoothAdapter.MyVi
             macAddress = itemView.findViewById(R.id.macAddress);
             bluetoothIcon = itemView.findViewById(R.id.bluetoothIcon);
         }
+    }
+
+    private OnConnectListener onConnectListener;
+
+    public void setOnConnectListener(OnConnectListener onConnectListener) {
+        this.onConnectListener = onConnectListener;
+    }
+
+    public interface OnConnectListener {
+        void onConnect(int position);
     }
 }
