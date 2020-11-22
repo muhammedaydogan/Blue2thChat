@@ -7,22 +7,36 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.ma.blue2thchat.FirstFragment"
+        android:name="com.ma.blue2thchat.fragments.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            app:destination="@id/SecondFragment"
+            app:launchSingleTop="true" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.ma.blue2thchat.SecondFragment"
+        android:name="com.ma.blue2thchat.fragments.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            app:destination="@id/FirstFragment"
+            app:launchSingleTop="true" />
+
+        <action
+            android:id="@+id/action_SecondFragment_to_SearchFragment"
+            app:destination="@id/SearchFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/nav_graph"
+            app:popUpToInclusive="true"/>
     </fragment>
+    <fragment
+        android:id="@+id/SearchFragment"
+        android:name="com.ma.blue2thchat.fragments.SearchFragment"
+        android:label="@string/search_fragment_label"
+        tools:layout="@layout/fragment_search"/>
 </navigation>
