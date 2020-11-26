@@ -77,12 +77,12 @@ public class SearchFragment extends Fragment {
         bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 12));
         bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 3));
         bleDevices.add(new BleDevice("Finch", "ec:ab:58:da:12:49", -1));
-        bleDevices.add(new BleDevice("Finch", "ec:ab:58:da:12:49", 19));
+        bleDevices.add(new BleDevice("The Score", "ec:ab:58:da:12:49", 19));
         bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 13));
         bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 4));
         bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 6));
-        bleDevices.add(new BleDevice("Finch", "ec:ab:58:da:12:49", 16));
-        bleDevices.add(new BleDevice("Finch", "ec:ab:58:da:12:49", 15));
+        bleDevices.add(new BleDevice("John Mackerel", "ec:ab:58:da:12:49", 16));
+        bleDevices.add(new BleDevice("Harley Johnson", "ec:ab:58:da:12:49", 15));
         bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 12));
         bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 11));
         bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 18));
