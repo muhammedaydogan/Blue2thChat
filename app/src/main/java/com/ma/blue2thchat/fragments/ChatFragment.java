@@ -43,9 +43,9 @@ public class ChatFragment extends Fragment {
         messages.add(new Message("Hi", true));
         messages.add(new Message("Yo", false));
         messages.add(new Message("Wassup", true));
-        messages.add(new Message("Playin Titanfall", false));
+        messages.add(new Message("Playin Titanfall" + new String(Character.toChars(0x1F600)), false));
         messages.add(new Message("I will join, let me know when you finish this round", true));
-        messages.add(new Message("Ok.", false));
+        messages.add(new Message(new String(Character.toChars(0x1F44D)), false));
         messages.add(new Message("Lorem ipsum dolor sit amet, consectetur adipiscing elit," +
                 " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim " +
                 "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." +
@@ -62,8 +62,8 @@ public class ChatFragment extends Fragment {
                 " deserunt mollit anim id est laborum.", false));
         messages.add(new Message("Lorem ipsum dolor sit amet, consectetur adipiscing elit," +
                 " deserunt mollit anim id est laborum.", true));
-        messages.add(new Message("Lorem ipsum dolor sit amet", false));
-        messages.add(new Message("Lorem ipsum dolor sit amet", true));
+        messages.add(new Message("Lorem ipsum dolor sit amet" + new String(Character.toChars(0x1F600)), false));
+        messages.add(new Message("Lorem ipsum dolor sit amet" + new String(Character.toChars(0x1F600)), true));
 
         ChatAdapter chatAdapter = new ChatAdapter(getContext(), messages, avatarNo, receiverAvatarNo);
 
