@@ -27,7 +27,7 @@ public class FirstFragment extends Fragment {
     EditText passwordEditText;
 
     SharedPreferences mPreferences;
-    private String sharedPrefFile = "com.blue2thchat.sharedprefs";
+    public static final String sharedPrefFile = "com.blue2thchat.sharedprefs";
 
     private long lastBackPress;
 

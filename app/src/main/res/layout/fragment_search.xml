@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
         android:text="Connect other devices to start chat"
-        android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +20,7 @@
     <View
         android:id="@+id/view2"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1.5dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/gradient"
@@ -35,35 +34,37 @@
         android:id="@+id/description_searching"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Searching for available devices"
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/searchingIcon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/searchingIcon" />
+        android:layout_marginTop="16dp"
+        android:text="@string/available_devices"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/searchingIcon"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="@+id/view2"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <ImageView
         android:id="@+id/searchingIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:src="@drawable/ic_cached_24px"
-        app:layout_constraintHorizontal_chainStyle="packed"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_margin="6dp"
+        android:src="@drawable/ic_baseline_cached_24"
+        app:layout_constraintBottom_toBottomOf="@+id/description_searching"
+        app:layout_constraintEnd_toEndOf="@+id/view2"
         app:layout_constraintStart_toEndOf="@+id/description_searching"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+        app:layout_constraintTop_toTopOf="@+id/description_searching" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        style="@style/scrollbar_style_vertical"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchingIcon" />
+        app:layout_constraintTop_toBottomOf="@+id/description_searching" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

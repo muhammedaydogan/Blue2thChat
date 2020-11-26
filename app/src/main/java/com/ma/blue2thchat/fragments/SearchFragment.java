@@ -1,6 +1,8 @@
 package com.ma.blue2thchat.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,7 +55,6 @@ public class SearchFragment extends Fragment {
         rotateAroundItself.setInterpolator(new LinearInterpolator());
 
         searchingIcon = view.findViewById(R.id.searchingIcon);
-        searchingIcon.startAnimation(rotateAroundItself);
 
         // This callback will only be called when MyFragment is at least Started.
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
@@ -64,8 +66,7 @@ public class SearchFragment extends Fragment {
                 if (newClick - lastBackPress > 2000) {
                     lastBackPress = Calendar.getInstance().getTimeInMillis();
                     Toast.makeText(getContext(), "Press again to exit", Toast.LENGTH_SHORT).show();
-                }
-                else
+                } else
                     getActivity().finish();
             }
         };
@@ -84,12 +85,59 @@ public class SearchFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
-        adapter.setOnConnectListener(new BluetoothAdapter.OnConnectListener() {
+        adapter.setOnStartConnectionListener(new BluetoothAdapter.OnStartConnectionListener() {
             @Override
-            public void onConnect(int position) {
+            public void onStartConnection(int position) {
                 Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
-                searchingIcon.clearAnimation();
+
+                /* Start Connection
+                 *
+                 * Assume that connection established
+                 * And display messaging ui */
+
+                NavHostFragment.findNavController(SearchFragment.this)
+                        .navigate(R.id.action_SearchFragment_to_chatFragment);
             }
         });
+
+        searchingIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (searchingIcon.getAnimation() == null || searchingIcon.getAnimation().hasEnded()) {
+                    searchingIcon.startAnimation(rotateAroundItself);
+
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Stop animation
+                            searchingIcon.clearAnimation();
+                        }
+                    }, 3000);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        searchingIcon.startAnimation(rotateAroundItself);
+
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Stop animation
+                searchingIcon.clearAnimation();
+            }
+        }, 3000);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (searchingIcon.getAnimation() != null || (searchingIcon.getAnimation() != null && !searchingIcon.getAnimation().hasEnded())) {
+            searchingIcon.clearAnimation();
+        }
     }
 }

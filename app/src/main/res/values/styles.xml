@@ -10,5 +10,24 @@
         <item name="android:scrollbarTrackVertical">@drawable/scrollbar_track</item>
         <item name="android:scrollbarSize">3.2dp</item>
         <item name="android:scrollbarFadeDuration">800</item>
-        <item name="android:scrollbarDefaultDelayBeforeFade">500</item></style>
+        <item name="android:scrollbarDefaultDelayBeforeFade">500</item>
+    </style>
+
+    <style name="ripplePrimary">
+        <item name="android:theme">@style/SelectableItemThemeColorPrimary</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="SelectableItemThemeColorPrimary">
+        <item name="colorControlHighlight">?attr/colorPrimary</item>
+    </style>
+
+    <style name="rippleSecondary">
+        <item name="android:theme">@style/SelectableItemThemeColorSecondary</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="SelectableItemThemeColorSecondary">
+        <item name="colorControlHighlight">?attr/colorSecondary</item>
+    </style>
 </resources>

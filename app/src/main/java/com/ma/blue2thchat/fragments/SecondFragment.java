@@ -67,7 +67,7 @@ public class SecondFragment extends Fragment {
         avatarImageView = view.findViewById(R.id.avatarImageView);
         avatarTextView = view.findViewById(R.id.avatarTextView);
 
-        avatarImageView.setImageResource((avatarNo == -1) ? R.drawable.ic_account_circle_24px : avatarRes[avatarNo]);
+        avatarImageView.setImageResource((avatarNo == -1) ? R.drawable.ic_baseline_account_circle_24 : avatarRes[avatarNo]);
         avatarTextView.setText((avatarNo == -1) ? getString(R.string.your_avatar) : avatarNames[avatarNo]);
 
         GridView gridView = view.findViewById(R.id.gridView);
@@ -90,7 +90,6 @@ public class SecondFragment extends Fragment {
                 preferencesEditor.putInt("avatar", avatarNo);
                 preferencesEditor.apply();
 
-                mPreferences = getContext().getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
                 NavHostFragment.findNavController(SecondFragment.this)
                         .navigate(R.id.action_SecondFragment_to_SearchFragment);
             }

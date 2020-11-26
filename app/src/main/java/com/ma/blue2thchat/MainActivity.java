@@ -17,12 +17,14 @@ public class MainActivity extends AppCompatActivity {
     public SharedPreferences mPreferences;
     private String sharedPrefFile =
             "com.blue2thchat.sharedprefs";
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Searching..", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -61,5 +63,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public Toolbar getToolbar() {
+        return toolbar;
+    }
+
+    public SharedPreferences getmPreferences(){
+        return mPreferences;
     }
 }

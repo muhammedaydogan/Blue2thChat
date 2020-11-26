@@ -38,8 +38,6 @@ public class BluetoothAdapter extends RecyclerView.Adapter<BluetoothAdapter.MyVi
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         BleDevice bleDevice = bleDevices.get(position);
 
-
-
         if (bleDevice.getAvatarNo() < avatarRes.length && bleDevice.getAvatarNo() >= 0)
             holder.avatarImageView.setImageResource(avatarRes[bleDevice.getAvatarNo()]);
 
@@ -57,8 +55,8 @@ public class BluetoothAdapter extends RecyclerView.Adapter<BluetoothAdapter.MyVi
         holder.bluetoothIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (onConnectListener != null)
-                    onConnectListener.onConnect(position);
+                if (onStartConnectionListener != null)
+                    onStartConnectionListener.onStartConnection(position);
             }
         });
     }
@@ -85,13 +83,13 @@ public class BluetoothAdapter extends RecyclerView.Adapter<BluetoothAdapter.MyVi
         }
     }
 
-    private OnConnectListener onConnectListener;
+    private OnStartConnectionListener onStartConnectionListener;
 
-    public void setOnConnectListener(OnConnectListener onConnectListener) {
-        this.onConnectListener = onConnectListener;
+    public void setOnStartConnectionListener(OnStartConnectionListener onStartConnectionListener) {
+        this.onStartConnectionListener = onStartConnectionListener;
     }
 
-    public interface OnConnectListener {
-        void onConnect(int position);
+    public interface OnStartConnectionListener {
+        void onStartConnection(int position);
     }
 }
