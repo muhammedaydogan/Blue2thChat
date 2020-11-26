@@ -15,12 +15,13 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ma.blue2thchat.R;
 import com.ma.blue2thchat.adapters.BluetoothAdapter;
-import com.ma.blue2thchat.bluetooth.BleDevice;
+import com.ma.blue2thchat.objects.BleDevice;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,16 +74,31 @@ public class SearchFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
 
         ArrayList<BleDevice> bleDevices = new ArrayList<>();
-        bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", -1));
+        bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 12));
         bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 3));
         bleDevices.add(new BleDevice("Finch", "ec:ab:58:da:12:49", -1));
         bleDevices.add(new BleDevice("Finch", "ec:ab:58:da:12:49", 19));
         bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 13));
+        bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 4));
+        bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 6));
+        bleDevices.add(new BleDevice("Finch", "ec:ab:58:da:12:49", 16));
+        bleDevices.add(new BleDevice("Finch", "ec:ab:58:da:12:49", 15));
+        bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 12));
+        bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 11));
+        bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 18));
+        bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", -1));
+        bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 2));
+        bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 17));
+
 
         BluetoothAdapter adapter = new BluetoothAdapter(bleDevices);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
         adapter.setOnStartConnectionListener(new BluetoothAdapter.OnStartConnectionListener() {

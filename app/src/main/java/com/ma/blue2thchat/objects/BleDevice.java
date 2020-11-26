@@ -1,4 +1,4 @@
-package com.ma.blue2thchat.bluetooth;
+package com.ma.blue2thchat.objects;
 
 public class BleDevice {
 

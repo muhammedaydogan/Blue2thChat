@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ma.blue2thchat.R;
-import com.ma.blue2thchat.bluetooth.BleDevice;
+import com.ma.blue2thchat.objects.BleDevice;
 
 import java.util.ArrayList;
 
@@ -52,7 +52,7 @@ public class BluetoothAdapter extends RecyclerView.Adapter<BluetoothAdapter.MyVi
             holder.avatarName.setText(bleDevice.getName());
 
         holder.macAddress.setText(bleDevice.getMacAddress());
-        holder.bluetoothIcon.setOnClickListener(new View.OnClickListener() {
+        holder.connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (onStartConnectionListener != null)
@@ -71,7 +71,7 @@ public class BluetoothAdapter extends RecyclerView.Adapter<BluetoothAdapter.MyVi
         public ImageView avatarImageView;
         public TextView avatarName;
         public TextView macAddress;
-        public ImageView bluetoothIcon;
+        public View connect;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,7 +79,7 @@ public class BluetoothAdapter extends RecyclerView.Adapter<BluetoothAdapter.MyVi
             avatarImageView = itemView.findViewById(R.id.avatar);
             avatarName = itemView.findViewById(R.id.username);
             macAddress = itemView.findViewById(R.id.macAddress);
-            bluetoothIcon = itemView.findViewById(R.id.bluetoothIcon);
+            connect = itemView.findViewById(R.id.connect);
         }
     }
 

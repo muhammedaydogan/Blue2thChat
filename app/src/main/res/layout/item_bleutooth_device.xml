@@ -7,8 +7,9 @@
 
     <ImageView
         android:id="@+id/avatar"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:foreground="?attr/selectableItemBackground"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         android:src="@drawable/ic_baseline_account_circle_24"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,13 +18,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <com.ma.blue2thchat.customview.AutoResizeTextView
         android:id="@+id/username"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Username"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@+id/connect"
         app:layout_constraintBottom_toTopOf="@+id/macAddress"
-        app:layout_constraintEnd_toStartOf="@+id/bluetoothIcon"
+        app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@+id/avatar"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,23 +35,46 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="43:A5:12:2C:7E:DD"
+        app:layout_constraintEnd_toStartOf="@+id/connect"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bluetoothIcon"
+        app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@+id/avatar"
         app:layout_constraintTop_toBottomOf="@+id/username" />
 
-    <ImageView
-        android:id="@+id/bluetoothIcon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:padding="12dp"
+    <View
+        android:id="@+id/connect"
+        android:layout_width="100dp"
+        android:layout_height="47dp"
         android:clickable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:src="@drawable/ic_baseline_bluetooth_24"
         style="@style/ripplePrimary"
+        android:background="@drawable/ripple_rounded"
         app:layout_constraintStart_toEndOf="@+id/username"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/connectIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:src="@drawable/ic_baseline_bluetooth_24"
+        app:layout_constraintBottom_toBottomOf="@+id/connect"
+        app:layout_constraintEnd_toStartOf="@+id/connectText"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@+id/connect"
+        app:layout_constraintTop_toTopOf="@+id/connect" />
+
+    <TextView
+        android:id="@+id/connectText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:text="Connect"
+        app:layout_constraintBottom_toBottomOf="@+id/connect"
+        app:layout_constraintEnd_toEndOf="@id/connect"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/connectIcon"
+        app:layout_constraintTop_toTopOf="@+id/connect" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
