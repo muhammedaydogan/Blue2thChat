@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.ma.blue2thchat.R;
@@ -90,8 +91,9 @@ public class SecondFragment extends Fragment {
                 preferencesEditor.putInt("avatar", avatarNo);
                 preferencesEditor.apply();
 
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_SearchFragment);
+//                NavHostFragment.findNavController(SecondFragment.this)
+//                        .navigate(R.id.action_SecondFragment_to_SearchFragment);
+                Navigation.findNavController(view).navigate(R.id.action_SecondFragment_to_SearchFragment);
             }
         });
 
@@ -102,7 +104,5 @@ public class SecondFragment extends Fragment {
                         .navigate(R.id.action_SecondFragment_to_FirstFragment);
             }
         });
-
-
     }
 }
