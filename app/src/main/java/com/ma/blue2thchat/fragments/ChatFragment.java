@@ -2,12 +2,10 @@ package com.ma.blue2thchat.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -90,16 +88,7 @@ public class ChatFragment extends Fragment {
             public void onLayoutChange(View view, int left, int top,
                                        int right, int bottom, int oldLeft, int oldTop,
                                        int oldRight, int oldBottom) {
-                Log.i(TAG, "onLayoutChange: " + bottom + " " + oldBottom);
-//                if (bottom < oldBottom) {
-//                    recyclerView.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-                Toast.makeText(getContext(), "123", Toast.LENGTH_SHORT).show();
                 recyclerView.scrollToPosition(messages.size() - 1);
-//                        }
-//                    }, 100);
-//                }
             }
         });
 
