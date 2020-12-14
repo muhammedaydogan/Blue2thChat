@@ -1,5 +1,7 @@
 package com.ma.blue2thchat.fragments;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,13 +16,13 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ma.blue2thchat.R;
-import com.ma.blue2thchat.adapters.BluetoothAdapter;
+import com.ma.blue2thchat.adapters.RecyclerViewBluetoothAdapter;
 import com.ma.blue2thchat.objects.BleDevice;
 
 import java.util.ArrayList;
@@ -33,6 +35,9 @@ public class SearchFragment extends Fragment {
 
     Animation rotateAroundItself;
     private View searchingIcon;
+    private View searchButton;
+
+    public static int REQUEST_ENABLE_BT = 12;
 
     @Override
     public View onCreateView(
@@ -56,6 +61,7 @@ public class SearchFragment extends Fragment {
         rotateAroundItself.setInterpolator(new LinearInterpolator());
 
         searchingIcon = view.findViewById(R.id.searchingIcon);
+        searchButton = view.findViewById(R.id.searchButton);
 
         // This callback will only be called when MyFragment is at least Started.
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
@@ -91,17 +97,20 @@ public class SearchFragment extends Fragment {
         bleDevices.add(new BleDevice(null, "ec:ab:58:da:12:49", 17));
 
 
-        BluetoothAdapter adapter = new BluetoothAdapter(bleDevices);
+        RecyclerViewBluetoothAdapter adapter = new RecyclerViewBluetoothAdapter(bleDevices);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 layoutManager.getOrientation());
+//        dividerItemDecoration.setDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.shape_recycler_divider, null));
+
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        adapter.setOnStartConnectionListener(new BluetoothAdapter.OnStartConnectionListener() {
+        adapter.setOnStartConnectionListener(new RecyclerViewBluetoothAdapter.OnStartConnectionListener() {
             @Override
             public void onStartConnection(int position) {
                 Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
@@ -111,12 +120,13 @@ public class SearchFragment extends Fragment {
                  * Assume that connection established
                  * And display messaging ui */
 
-                NavHostFragment.findNavController(SearchFragment.this)
-                        .navigate(R.id.action_SearchFragment_to_chatFragment);
+//                NavHostFragment.findNavController(SearchFragment.this)
+//                        .navigate(R.id.action_SearchFragment_to_chatFragment);
+                Navigation.findNavController(view).navigate(R.id.action_SearchFragment_to_chatFragment);
             }
         });
 
-        searchingIcon.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener onClickListenerSearch = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (searchingIcon.getAnimation() == null || searchingIcon.getAnimation().hasEnded()) {
@@ -131,22 +141,41 @@ public class SearchFragment extends Fragment {
                     }, 3000);
                 }
             }
-        });
+        };
+
+        searchingIcon.setOnClickListener(onClickListenerSearch);
+        searchButton.setOnClickListener(onClickListenerSearch);
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        searchingIcon.startAnimation(rotateAroundItself);
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter == null) {
+            // Device doesn't support Bluetooth
+            Toast.makeText(getContext(), "Bluetooth is not available!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "Bluetooth is available", Toast.LENGTH_SHORT).show();
+        }
 
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Stop animation
-                searchingIcon.clearAnimation();
+        try {
+            if (!bluetoothAdapter.isEnabled()) {
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             }
-        }, 3000);
+            searchingIcon.startAnimation(rotateAroundItself);
+
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // Stop animation
+                    searchingIcon.clearAnimation();
+                }
+            }, 3000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

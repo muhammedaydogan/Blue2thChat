@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import static com.ma.blue2thchat.fragments.SecondFragment.avatarNames;
 import static com.ma.blue2thchat.fragments.SecondFragment.avatarRes;
 
-public class BluetoothAdapter extends RecyclerView.Adapter<BluetoothAdapter.MyViewHolder> {
+public class RecyclerViewBluetoothAdapter extends RecyclerView.Adapter<RecyclerViewBluetoothAdapter.MyViewHolder> {
 
-    private static final String TAG = "BluetoothAdapter";
+    private static final String TAG = "RecyclerViewBluetoothAdapter";
     ArrayList<BleDevice> bleDevices;
 
-    public BluetoothAdapter(ArrayList<BleDevice> bleDevices) {
+    public RecyclerViewBluetoothAdapter(ArrayList<BleDevice> bleDevices) {
         this.bleDevices = bleDevices;
     }
 

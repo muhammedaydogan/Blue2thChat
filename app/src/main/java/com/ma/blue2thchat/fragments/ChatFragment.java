@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +24,9 @@ import com.ma.blue2thchat.objects.Message;
 import java.util.ArrayList;
 
 public class ChatFragment extends Fragment {
+
+    EditText editTextMessage;
+
     @Nullable
     @Override
     public View onCreateView(
@@ -74,6 +79,41 @@ public class ChatFragment extends Fragment {
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(chatAdapter);
+        recyclerView.scrollToPosition(messages.size() - 1);
+
+        editTextMessage = view.findViewById(R.id.editTextMessage);
+
+//        editTextMessage.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+//            @Override
+//            public void onLayoutChange(View view, int left, int top,
+//                                       int right, int bottom, int oldLeft, int oldTop,
+//                                       int oldRight, int oldBottom) {
+//                if (bottom < oldBottom) {
+//                    recyclerView.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Toast.makeText(getContext(), "123", Toast.LENGTH_SHORT).show();
+//                            recyclerView.smoothScrollToPosition(messages.size() - 1);
+//                        }
+//                    }, 100);
+//                }
+//            }
+//        });
+
+        view.findViewById(R.id.sendIcon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String message = editTextMessage.getText().toString();
+
+                editTextMessage.setText("");
+
+                messages.add(new Message(message, false));
+                chatAdapter.notifyDataSetChanged();
+
+                recyclerView.scrollToPosition(messages.size() - 1);
+            }
+        });
+
     }
 
     @Override

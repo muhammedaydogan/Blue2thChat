@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.ma.blue2thchat.R;
@@ -72,8 +73,9 @@ public class FirstFragment extends Fragment {
                 preferencesEditor.putString("username", usernameEditText.getText().toString());
                 preferencesEditor.putString("password", passwordEditText.getText().toString());
                 preferencesEditor.apply();
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+//                NavHostFragment.findNavController(FirstFragment.this)
+//                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                Navigation.findNavController(view).navigate(R.id.action_FirstFragment_to_SecondFragment);
             }
         });
 
