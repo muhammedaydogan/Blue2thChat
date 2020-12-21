@@ -11,7 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.ma.blue2thchat.bluetooth.BluetoothChatService;
+// import com.ma.blue2thchat.bluetooth.BluetoothChatService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Member object for the chat services
      */
-    public BluetoothChatService mChatService = null;
+    // public BluetoothChatService mChatService = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

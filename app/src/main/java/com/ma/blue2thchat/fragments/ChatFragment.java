@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ma.blue2thchat.MainActivity;
 import com.ma.blue2thchat.R;
 import com.ma.blue2thchat.adapters.ChatAdapter;
+import com.ma.blue2thchat.bluetooth.SendReceive;
 import com.ma.blue2thchat.objects.Message;
 
 import java.util.ArrayList;
@@ -26,6 +29,11 @@ public class ChatFragment extends Fragment {
 
     private static final String TAG = "ChatFragment";
     EditText editTextMessage;
+    ImageView sendButton;
+    public static ArrayList<com.ma.blue2thchat.objects.Message> messages = new ArrayList<>();
+    public static String clientName = null;
+    public static SendReceive chat_sendReceive;
+
 
     @Nullable
     @Override
@@ -44,31 +52,7 @@ public class ChatFragment extends Fragment {
         int avatarNo = ((SharedPreferences) ((MainActivity) getActivity()).getmPreferences()).getInt("avatar", -1);
         int receiverAvatarNo = 7;
 
-        ArrayList<com.ma.blue2thchat.objects.Message> messages = new ArrayList<>();
-        messages.add(new Message("Hi", true));
-        messages.add(new Message("Yo", false));
-        messages.add(new Message("Wassup", true));
-        messages.add(new Message("Playin Titanfall" + new String(Character.toChars(0x1F600)), false));
-        messages.add(new Message("I will join, let me know when you finish this round", true));
-        messages.add(new Message(new String(Character.toChars(0x1F44D)), false));
-        messages.add(new Message("Lorem ipsum dolor sit amet, consectetur adipiscing elit," +
-                " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim " +
-                "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." +
-                " Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat" +
-                " nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia" +
-                " deserunt mollit anim id est laborum.", false));
-        messages.add(new Message("Lorem ipsum dolor sit amet, consectetur adipiscing elit," +
-                " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim " +
-                "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." +
-                " Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat" +
-                " nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia" +
-                " deserunt mollit anim id est laborum.", true));
-        messages.add(new Message("Lorem ipsum dolor sit amet, consectetur adipiscing elit," +
-                " deserunt mollit anim id est laborum.", false));
-        messages.add(new Message("Lorem ipsum dolor sit amet, consectetur adipiscing elit," +
-                " deserunt mollit anim id est laborum.", true));
-        messages.add(new Message("Lorem ipsum dolor sit amet" + new String(Character.toChars(0x1F600)), false));
-        messages.add(new Message("Lorem ipsum dolor sit amet" + new String(Character.toChars(0x1F600)), true));
+
 
         ChatAdapter chatAdapter = new ChatAdapter(getContext(), messages, avatarNo, receiverAvatarNo);
 
@@ -82,6 +66,8 @@ public class ChatFragment extends Fragment {
         recyclerView.scrollToPosition(messages.size() - 1);
 
         editTextMessage = view.findViewById(R.id.editTextMessage);
+        sendButton = view.findViewById(R.id.sendIcon);
+
 
         editTextMessage.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
@@ -92,10 +78,15 @@ public class ChatFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.sendIcon).setOnClickListener(new View.OnClickListener() {
+        sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String message = editTextMessage.getText().toString();
+                String message = String.valueOf(editTextMessage.getText());
+                if (chat_sendReceive == null){
+                    Toast.makeText(getContext(), "NULL", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                chat_sendReceive.write(message.getBytes());
 
                 editTextMessage.setText("");
 
@@ -103,6 +94,7 @@ public class ChatFragment extends Fragment {
                 chatAdapter.notifyDataSetChanged();
 
                 recyclerView.scrollToPosition(messages.size() - 1);
+
             }
         });
 
@@ -114,7 +106,7 @@ public class ChatFragment extends Fragment {
 
         Toolbar toolbar = ((MainActivity) getActivity()).getToolbar();
 
-        toolbar.setTitle("Anonymous Panda");
+        toolbar.setTitle(clientName);
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
