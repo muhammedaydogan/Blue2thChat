@@ -80,4 +80,18 @@
         app:layout_constraintStart_toEndOf="@+id/connectIcon"
         app:layout_constraintTop_toTopOf="@+id/connect" />
 
+    <View
+        android:id="@+id/startChat"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/connect"
+        app:layout_constraintStart_toEndOf="@+id/avatar"
+        app:layout_constraintTop_toTopOf="parent"
+        android:clickable="true"
+        style="@style/ripplePrimary"
+        />
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

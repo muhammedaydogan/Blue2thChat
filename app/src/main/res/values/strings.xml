@@ -18,7 +18,7 @@
     <string name="unknown_device">Unknown Device</string>
     <string name="available_devices">Available Devices</string>
     <string name="type_a_message">Type a message</string>
-    <string name="enable_discoverability">Make me discoverable</string>
+    <string name="enable_discoverability">Listen</string>
     <string name="search">Search</string>
     <string name="connect_other_devices_to_start_chat">Connect other devices to start chat</string>
 </resources>

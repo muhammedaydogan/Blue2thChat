@@ -2,6 +2,7 @@ package com.ma.blue2thchat.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ma.blue2thchat.MainActivity;
 import com.ma.blue2thchat.R;
 import com.ma.blue2thchat.adapters.ChatAdapter;
-import com.ma.blue2thchat.bluetooth.SendReceive;
+// import com.ma.blue2thchat.bluetooth.SendReceive;
 import com.ma.blue2thchat.objects.Message;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class ChatFragment extends Fragment {
@@ -32,7 +34,10 @@ public class ChatFragment extends Fragment {
     ImageView sendButton;
     public static ArrayList<com.ma.blue2thchat.objects.Message> messages = new ArrayList<>();
     public static String clientName = null;
-    public static SendReceive chat_sendReceive;
+    public SearchFragment.SendReceive chat_sendReceive;
+    public static ChatAdapter chatAdapter;
+    public static RecyclerView recyclerView;
+    // private Bundle bundle;
 
 
     @Nullable
@@ -41,6 +46,12 @@ public class ChatFragment extends Fragment {
             @NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState
     ) {
+//        bundle = this.getArguments();
+//        if (bundle == null){
+//            Log.d("ClientClass", "Bundle obj is null");
+//        }
+
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_chat, container, false);
     }
@@ -54,12 +65,19 @@ public class ChatFragment extends Fragment {
 
 
 
-        ChatAdapter chatAdapter = new ChatAdapter(getContext(), messages, avatarNo, receiverAvatarNo);
+//        if (bundle.getSerializable("sendReceive") == null){
+//            Log.d("ClientClass", "ChatFragment Bundle serializable is null");
+//            return;
+//        }
+//        sendReceive = (SendReceive) bundle.getSerializable("sendReceive");
+
+
+        chatAdapter = new ChatAdapter(getContext(), messages, avatarNo, receiverAvatarNo);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setStackFromEnd(true);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerViewMessages);
+        recyclerView = view.findViewById(R.id.recyclerViewMessages);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(chatAdapter);
@@ -81,23 +99,26 @@ public class ChatFragment extends Fragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                chat_sendReceive = SearchFragment.sendReceive;
                 String message = String.valueOf(editTextMessage.getText());
-                if (chat_sendReceive == null){
-                    Toast.makeText(getContext(), "NULL", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 chat_sendReceive.write(message.getBytes());
 
                 editTextMessage.setText("");
 
                 messages.add(new Message(message, false));
-                chatAdapter.notifyDataSetChanged();
 
+                chatAdapter.notifyDataSetChanged();
                 recyclerView.scrollToPosition(messages.size() - 1);
 
             }
         });
 
+    }
+    public static void readMsg(String msg){
+
+        messages.add(new Message(msg, true));
+        chatAdapter.notifyDataSetChanged();
+        recyclerView.scrollToPosition(messages.size() - 1);
     }
 
     @Override
@@ -126,4 +147,6 @@ public class ChatFragment extends Fragment {
         toolbar.setNavigationIcon(null);
         toolbar.setNavigationOnClickListener(null);
     }
+
+
 }

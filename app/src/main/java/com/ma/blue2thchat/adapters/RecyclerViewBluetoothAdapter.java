@@ -59,6 +59,13 @@ public class RecyclerViewBluetoothAdapter extends RecyclerView.Adapter<RecyclerV
                     onStartConnectionListener.onStartConnection(position);
             }
         });
+        holder.startChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onStartConnectionListener != null)
+                    onStartConnectionListener.onStartChat(position);
+            }
+        });
     }
 
     @Override
@@ -72,6 +79,7 @@ public class RecyclerViewBluetoothAdapter extends RecyclerView.Adapter<RecyclerV
         public TextView avatarName;
         public TextView macAddress;
         public View connect;
+        public View startChat;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,6 +88,7 @@ public class RecyclerViewBluetoothAdapter extends RecyclerView.Adapter<RecyclerV
             avatarName = itemView.findViewById(R.id.username);
             macAddress = itemView.findViewById(R.id.macAddress);
             connect = itemView.findViewById(R.id.connect);
+            startChat = itemView.findViewById(R.id.startChat);
         }
     }
 
@@ -91,5 +100,6 @@ public class RecyclerViewBluetoothAdapter extends RecyclerView.Adapter<RecyclerV
 
     public interface OnStartConnectionListener {
         void onStartConnection(int position);
+        void onStartChat(int position);
     }
 }

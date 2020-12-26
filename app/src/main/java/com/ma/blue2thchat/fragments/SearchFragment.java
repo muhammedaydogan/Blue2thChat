@@ -2,6 +2,8 @@ package com.ma.blue2thchat.fragments;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,10 +32,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ma.blue2thchat.R;
 import com.ma.blue2thchat.adapters.RecyclerViewBluetoothAdapter;
-import com.ma.blue2thchat.bluetooth.ClientClass;
-import com.ma.blue2thchat.bluetooth.SendReceive;
+//import com.ma.blue2thchat.bluetooth.ClientClass;
+//import com.ma.blue2thchat.bluetooth.SendReceive;
+//import com.ma.blue2thchat.bluetooth.ServerClass;
 import com.ma.blue2thchat.objects.BleDevice;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -61,7 +67,7 @@ public class SearchFragment extends Fragment {
 
     private static final String APP_NAME = "Blue2thchat";
     private static final UUID MY_UUID = UUID.fromString("b4f8dbce-651c-419d-86c9-2d175e02b501");
-    public SendReceive sr;
+
 
     public static final int STATE_LISTENING = 1;
     public static final int STATE_CONNECTING = 2;
@@ -69,7 +75,9 @@ public class SearchFragment extends Fragment {
     public static final int STATE_CONNECTION_FAILED = 4;
     public static final int STATE_MESSAGE_RECEIVED = 5;
 
-    int REQUEST_ENABLE_BLUETOOTH = 1;
+    public static SendReceive sendReceive;
+
+
 
 
     // Create a BroadcastReceiver for ACTION_FOUND.
@@ -91,66 +99,6 @@ public class SearchFragment extends Fragment {
         }
     };
 
-    /**
-     * The Handler that gets information back from the BluetoothChatService
-     */
-//    @SuppressLint("HandlerLeak")
-//    private final Handler mHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case Constants.MESSAGE_STATE_CHANGE:
-//                    switch (msg.arg1) {
-//                        case BluetoothChatService.STATE_CONNECTED:
-////                            setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
-//                            Toast.makeText(getContext(), "Connected", Toast.LENGTH_SHORT).show();
-////                            mConversationArrayAdapter.clear();
-//                            break;
-//                        case BluetoothChatService.STATE_CONNECTING:
-////                            setStatus(R.string.title_connecting);
-//                            Toast.makeText(getContext(), "Connecting", Toast.LENGTH_SHORT).show();
-//                            break;
-//                        case BluetoothChatService.STATE_LISTEN:
-//                        case BluetoothChatService.STATE_NONE:
-////                            setStatus(R.string.title_not_connected);
-//                            Toast.makeText(getContext(), "Not Connected", Toast.LENGTH_SHORT).show();
-//                            break;
-//                    }
-//                    break;
-//                case Constants.MESSAGE_WRITE:
-//                    byte[] writeBuf = (byte[]) msg.obj;
-//                    // construct a string from the buffer
-//                    String writeMessage = new String(writeBuf);
-////                    mConversationArrayAdapter.add("Me:  " + writeMessage);
-//                    break;
-//                case Constants.MESSAGE_READ:
-//                    byte[] readBuf = (byte[]) msg.obj;
-//                    // construct a string from the valid bytes in the buffer
-//                    String readMessage = new String(readBuf, 0, msg.arg1);
-////                    mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
-//                    break;
-//                case Constants.MESSAGE_DEVICE_NAME:
-//                    // save the connected device's name
-////                    mConnectedDeviceName = msg.getData().getString(Constants.DEVICE_NAME);
-////                    if (null != activity) {
-////                        Toast.makeText(activity, "Connected to "
-////                                + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
-////                    }
-//                    break;
-//                case Constants.MESSAGE_TOAST:
-////                    if (null != activity) {
-////                        Toast.makeText(activity, msg.getData().getString(Constants.TOAST),
-////                                Toast.LENGTH_SHORT).show();
-////                    }
-//                    break;
-//            }
-//        }
-//    };
-
-    /**
-     * String buffer for outgoing messages
-     */
-    private StringBuffer mOutStringBuffer;
 
     @Override
     public View onCreateView(
@@ -177,6 +125,7 @@ public class SearchFragment extends Fragment {
         searchButton = view.findViewById(R.id.searchButton);
         makeItVisibleButton = view.findViewById(R.id.makeItVisibleButton);
         mOutMessage = view.findViewById(R.id.editTextMessage);
+        // test_sr = ChatFragment.chat_sendReceive;
 
         // This callback will only be called when MyFragment is at least Started.
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
@@ -229,9 +178,22 @@ public class SearchFragment extends Fragment {
                     e.printStackTrace();
                 }
                 connectDevice(position);
-                ChatFragment.messages.clear(); // messages is deleted for new connection
+                // ChatFragment.messages.clear(); // messages is deleted for new connection
                 ChatFragment.clientName = bleDevices.get(position).getName(); // chat fragment title is solved
-                ChatFragment.chat_sendReceive = sr;
+
+//                ChatFragment chatFragment = new ChatFragment();
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("sendReceive", ChatFragment.chat_sendReceive);
+//                chatFragment.setArguments(bundle);
+                // ChatFragment.chat_sendReceive = getSendReceive();
+
+                Navigation.findNavController(view).navigate(R.id.action_SearchFragment_to_chatFragment);
+            }
+
+            @Override
+            public void onStartChat(int position) {
+                ChatFragment.clientName = bleDevices.get(position).getName();
+                // ChatFragment.chat_sendReceive = getSendReceive();
                 Navigation.findNavController(view).navigate(R.id.action_SearchFragment_to_chatFragment);
             }
         });
@@ -251,10 +213,9 @@ public class SearchFragment extends Fragment {
         makeItVisibleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent discoverableIntent =
-                        new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-                discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-                startActivity(discoverableIntent);
+
+                ServerClass server = new ServerClass(bluetoothAdapter, APP_NAME, MY_UUID);
+                server.start();
             }
         });
     }
@@ -266,11 +227,7 @@ public class SearchFragment extends Fragment {
         // Get the BluetoothDevice object
         BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
 
-        ClientClass client = new ClientClass(device, MY_UUID, bluetoothAdapter, handler, sr);
-        if (sr == null){
-            Toast.makeText(getContext(), "CLIENT SendReceiver is NULL", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        ClientClass client = new ClientClass(device, MY_UUID);
         client.start();
         Toast.makeText(getContext(), "Connecting as client", Toast.LENGTH_SHORT).show();
     }
@@ -326,17 +283,6 @@ public class SearchFragment extends Fragment {
             }
         }
 
-//        ServerClass server = new ServerClass(bluetoothAdapter, APP_NAME, MY_UUID, handler, sr);
-//        server.start();
-
-
-
-//        if (bluetoothAdapter.isDiscovering()) {
-//            bluetoothAdapter.cancelDiscovery();
-//        }
-
-
-        // Log.i(TAG, "startSearch: Started");
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
@@ -371,10 +317,12 @@ public class SearchFragment extends Fragment {
                     Toast.makeText(getContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
                     break;
                 case STATE_MESSAGE_RECEIVED:
+                    Log.d("ClientClass", "State Message Received is working...");
                     // We ll write later
                     byte [] readBuffer = (byte[]) msg.obj;
                     String tempMsg = new String(readBuffer, 0, msg.arg1);
-                    ChatFragment.messages.add(new com.ma.blue2thchat.objects.Message(tempMsg, true));
+                    ChatFragment.readMsg(tempMsg);
+                    //ChatFragment.messages.add(new com.ma.blue2thchat.objects.Message(tempMsg, true));
                     break;
 
             }
@@ -407,5 +355,148 @@ public class SearchFragment extends Fragment {
         }
 
         super.onDestroyView();
+    }
+
+    public SendReceive getSendReceive() {
+        return sendReceive;
+    }
+
+    public void setSendReceive(SendReceive sendReceive) {
+        this.sendReceive = sendReceive;
+    }
+
+    public class ServerClass extends Thread {
+
+        private BluetoothServerSocket serverSocket;
+
+        public ServerClass(BluetoothAdapter bluetoothAdapter, String APP_NAME, UUID MY_UUID){
+
+
+            try{
+                serverSocket = bluetoothAdapter.listenUsingRfcommWithServiceRecord(APP_NAME, MY_UUID);
+            }catch (IOException ex){
+                ex.printStackTrace();
+            }
+        }
+
+
+        public void run(){
+            BluetoothSocket socket = null;
+            while (socket == null){
+                try{
+                    Message message = Message.obtain();
+                    message.what = STATE_CONNECTING; // STATE_CONNECTING
+                    handler.sendMessage(message);
+                    socket = serverSocket.accept();
+                }catch (IOException e){
+                    e.printStackTrace();
+                    Message message = Message.obtain();
+                    message.what = STATE_CONNECTION_FAILED; // STATE_CONNECTION_FAILED
+                    handler.sendMessage(message);
+
+                }
+
+                if (socket != null){
+                    Message message = Message.obtain();
+                    message.what = STATE_CONNECTED; // STATE_CONNECTED
+                    handler.sendMessage(message);
+                    sendReceive = new SendReceive(socket);
+                    sendReceive.start();
+                    break;
+                }
+
+            }
+        }
+    }
+
+    public class ClientClass extends Thread {
+
+        private BluetoothSocket socket;
+        private BluetoothDevice device;
+
+
+
+        public ClientClass(BluetoothDevice my_device, UUID MY_UUID){
+            device = my_device;
+            try{
+                socket = device.createRfcommSocketToServiceRecord(MY_UUID);
+            }catch (IOException ex){
+                ex.printStackTrace();
+            }
+        }
+
+
+        public void run(){
+
+            // adapter.cancelDiscovery();
+            try{
+                socket.connect();
+                Message message = Message.obtain();
+                message.what = SearchFragment.STATE_CONNECTED;
+                handler.sendMessage(message);
+
+                sendReceive = new SendReceive(socket);
+
+                sendReceive.start();
+
+            }catch (IOException e){
+                e.printStackTrace();
+                Message message = Message.obtain();
+                message.what = SearchFragment.STATE_CONNECTION_FAILED;
+                handler.sendMessage(message);
+            }
+        }
+
+    }
+
+    public class SendReceive extends Thread {
+        private final BluetoothSocket bluetoothSocket;
+        private final InputStream inputStream;
+        private final OutputStream outputStream;
+
+
+        public SendReceive(BluetoothSocket socket){
+
+            bluetoothSocket = socket;
+            InputStream tempIn = null;
+            OutputStream tempOut = null;
+
+
+            try {
+                tempIn = bluetoothSocket.getInputStream();
+                tempOut = bluetoothSocket.getOutputStream();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
+            inputStream = tempIn;
+            outputStream = tempOut;
+        }
+
+        public void run(){
+
+            byte [] buffer = new byte[1024];
+            int bytes;
+
+
+            while(true){
+                try{
+                    bytes = inputStream.read(buffer);
+                    handler.obtainMessage(SearchFragment.STATE_MESSAGE_RECEIVED, bytes,-1, buffer).sendToTarget();
+                }catch (IOException e){
+                    e.printStackTrace();
+                    break;
+                }
+            }
+        }
+
+        public void write(byte[] bytes){
+            try{
+                outputStream.write(bytes);
+
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
     }
 }

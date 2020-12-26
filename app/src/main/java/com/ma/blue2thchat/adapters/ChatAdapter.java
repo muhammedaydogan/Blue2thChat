@@ -40,11 +40,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
+        View view = null;
         if (viewType == INCOMING_MESSAGE) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_incoming_message, parent, false);
-        } else {
+        } if (viewType == OUTGOING_MESSAGE) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_outgoing_message, parent, false);
         }
@@ -61,12 +61,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
                 if (avatarNo >= 0)
                     if (avatarNo < avatarRes.length)
                         holder.avatar.setImageResource(avatarRes[avatarNo]);
-                break;
+
             case OUTGOING_MESSAGE:
                 if (receiverAvatarNo >= 0)
                     if (receiverAvatarNo < avatarRes.length)
                         holder.avatar.setImageResource(avatarRes[receiverAvatarNo]);
-                break;
+
         }
 
         holder.message.setText(message.getMessage());
