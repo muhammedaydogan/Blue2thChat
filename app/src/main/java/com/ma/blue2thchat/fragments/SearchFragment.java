@@ -80,6 +80,7 @@ public class SearchFragment extends Fragment {
 
 
 
+
     // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
@@ -179,7 +180,7 @@ public class SearchFragment extends Fragment {
                 }
                 connectDevice(position);
                 // ChatFragment.messages.clear(); // messages is deleted for new connection
-                ChatFragment.clientName = bleDevices.get(position).getName(); // chat fragment title is solved
+                //ChatFragment.clientName = bleDevices.get(position).getName(); // chat fragment title is solved
 
 //                ChatFragment chatFragment = new ChatFragment();
 //                Bundle bundle = new Bundle();
@@ -192,7 +193,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onStartChat(int position) {
-                ChatFragment.clientName = bleDevices.get(position).getName();
+                // ChatFragment.clientName = bleDevices.get(position).getName();
                 // ChatFragment.chat_sendReceive = getSendReceive();
                 Navigation.findNavController(view).navigate(R.id.action_SearchFragment_to_chatFragment);
             }

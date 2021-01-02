@@ -46,11 +46,6 @@ public class ChatFragment extends Fragment {
             @NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState
     ) {
-//        bundle = this.getArguments();
-//        if (bundle == null){
-//            Log.d("ClientClass", "Bundle obj is null");
-//        }
-
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_chat, container, false);
@@ -60,16 +55,11 @@ public class ChatFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // avatar no
         int avatarNo = ((SharedPreferences) ((MainActivity) getActivity()).getmPreferences()).getInt("avatar", -1);
+        clientName = ((SharedPreferences) ((MainActivity) getActivity()).getmPreferences()).getString("username","User");
         int receiverAvatarNo = 7;
 
-
-
-//        if (bundle.getSerializable("sendReceive") == null){
-//            Log.d("ClientClass", "ChatFragment Bundle serializable is null");
-//            return;
-//        }
-//        sendReceive = (SendReceive) bundle.getSerializable("sendReceive");
 
 
         chatAdapter = new ChatAdapter(getContext(), messages, avatarNo, receiverAvatarNo);

@@ -25,7 +25,6 @@ public class FirstFragment extends Fragment {
     private static final String TAG = "FirstFragment";
 
     EditText usernameEditText;
-    EditText passwordEditText;
 
     SharedPreferences mPreferences;
     public static final String sharedPrefFile = "com.blue2thchat.sharedprefs";
@@ -62,7 +61,7 @@ public class FirstFragment extends Fragment {
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
         usernameEditText = view.findViewById(R.id.usernameEditText);
-        passwordEditText = view.findViewById(R.id.passwordEditText);
+
 
         mPreferences = getContext().getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
 
@@ -71,7 +70,6 @@ public class FirstFragment extends Fragment {
             public void onClick(View view) {
                 SharedPreferences.Editor preferencesEditor = mPreferences.edit();
                 preferencesEditor.putString("username", usernameEditText.getText().toString());
-                preferencesEditor.putString("password", passwordEditText.getText().toString());
                 preferencesEditor.apply();
 //                NavHostFragment.findNavController(FirstFragment.this)
 //                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
@@ -84,11 +82,10 @@ public class FirstFragment extends Fragment {
 
     private void setUserInfo(View view) {
         String username = "";
-        String password = "";
+
         username = mPreferences.getString("username", username);
-        password = mPreferences.getString("password", password);
 //        Log.i(TAG, "setUserInfo: " + mPreferences.getAll());
         usernameEditText.setText(username);
-        passwordEditText.setText(password);
+
     }
 }
