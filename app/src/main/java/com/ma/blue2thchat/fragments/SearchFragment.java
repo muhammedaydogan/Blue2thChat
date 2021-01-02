@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -30,6 +31,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ma.blue2thchat.MainActivity;
 import com.ma.blue2thchat.R;
 import com.ma.blue2thchat.adapters.RecyclerViewBluetoothAdapter;
 //import com.ma.blue2thchat.bluetooth.ClientClass;
@@ -188,13 +190,13 @@ public class SearchFragment extends Fragment {
 //                chatFragment.setArguments(bundle);
                 // ChatFragment.chat_sendReceive = getSendReceive();
 
+
                 Navigation.findNavController(view).navigate(R.id.action_SearchFragment_to_chatFragment);
             }
 
             @Override
             public void onStartChat(int position) {
-                // ChatFragment.clientName = bleDevices.get(position).getName();
-                // ChatFragment.chat_sendReceive = getSendReceive();
+                ChatFragment.receiverAvatarNo = ((SharedPreferences) ((MainActivity) getActivity()).getmPreferences()).getInt("avatar", -1);
                 Navigation.findNavController(view).navigate(R.id.action_SearchFragment_to_chatFragment);
             }
         });

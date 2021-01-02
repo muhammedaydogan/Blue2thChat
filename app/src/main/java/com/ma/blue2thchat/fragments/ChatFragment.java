@@ -37,6 +37,8 @@ public class ChatFragment extends Fragment {
     public SearchFragment.SendReceive chat_sendReceive;
     public static ChatAdapter chatAdapter;
     public static RecyclerView recyclerView;
+    public static int receiverAvatarNo;
+
     // private Bundle bundle;
 
 
@@ -58,7 +60,7 @@ public class ChatFragment extends Fragment {
         // avatar no
         int avatarNo = ((SharedPreferences) ((MainActivity) getActivity()).getmPreferences()).getInt("avatar", -1);
         clientName = ((SharedPreferences) ((MainActivity) getActivity()).getmPreferences()).getString("username","User");
-        int receiverAvatarNo = 7;
+
 
 
 
